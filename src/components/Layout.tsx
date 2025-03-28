@@ -1,8 +1,12 @@
 import React from 'react';
-import { Outlet, Link } from 'react-router-dom';
-import { Ambulance, User, Home } from 'lucide-react';
+import { Outlet, Link, useLocation } from 'react-router-dom';
+import { Ambulance, User, Home, FileText } from 'lucide-react';
+import { useAuthStore } from '../lib/store';
 
 export function Layout() {
+  const location = useLocation();
+  const user = useAuthStore((state) => state.user);
+
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="bg-gradient-to-r from-red-600 to-blue-600 shadow-lg">
@@ -17,18 +21,43 @@ export function Layout() {
             <nav className="flex items-center space-x-6">
               <Link 
                 to="/" 
-                className="text-white hover:opacity-90 transition-opacity flex items-center space-x-2"
+                className={`text-white hover:opacity-90 transition-opacity flex items-center space-x-2 ${
+                  location.pathname === '/' ? 'border-b-2 border-white pb-1' : ''
+                }`}
               >
                 <Home className="h-5 w-5" />
                 <span>Início</span>
               </Link>
               <Link 
-                to="/login" 
-                className="text-white hover:opacity-90 transition-opacity flex items-center space-x-2"
+                to="/documentacao" 
+                className={`text-white hover:opacity-90 transition-opacity flex items-center space-x-2 ${
+                  location.pathname === '/documentacao' ? 'border-b-2 border-white pb-1' : ''
+                }`}
               >
-                <User className="h-5 w-5" />
-                <span>Área do RH</span>
+                <FileText className="h-5 w-5" />
+                <span>Documentação</span>
               </Link>
+              {user ? (
+                <Link 
+                  to="/admin" 
+                  className={`text-white hover:opacity-90 transition-opacity flex items-center space-x-2 ${
+                    location.pathname === '/admin' ? 'border-b-2 border-white pb-1' : ''
+                  }`}
+                >
+                  <User className="h-5 w-5" />
+                  <span>Painel Admin</span>
+                </Link>
+              ) : (
+                <Link 
+                  to="/login" 
+                  className={`text-white hover:opacity-90 transition-opacity flex items-center space-x-2 ${
+                    location.pathname === '/login' ? 'border-b-2 border-white pb-1' : ''
+                  }`}
+                >
+                  <User className="h-5 w-5" />
+                  <span>Área do RH</span>
+                </Link>
+              )}
             </nav>
           </div>
         </div>
@@ -53,8 +82,10 @@ export function Layout() {
               <p>CEP: 55815-140</p>
             </div>
             <div>
-              <h3 className="text-lg font-semibold mb-4">Redes Sociais</h3>
+              <h3 className="text-lg font-semibold mb-4">Links Rápidos</h3>
               <div className="space-y-2">
+                <Link to="/" className="block hover:text-red-400">Início</Link>
+                <Link to="/documentacao" className="block hover:text-red-400">Envio de Documentação</Link>
                 <a href="https://www.instagram.com/nordesteemergencias/" target="_blank" rel="noopener noreferrer" className="block hover:text-red-400">
                   Instagram
                 </a>
